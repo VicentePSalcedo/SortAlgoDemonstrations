@@ -1,3 +1,4 @@
+package src;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,11 +6,14 @@ import java.util.Random;
 
 class Sort{
     public static void main(String[] args) {
-        int numberOfItems = 10;
+        int numberOfItems = Integer.parseInt(args[0]);
         int[] arrOfItems = generateRandomNums(numberOfItems);
         int[] sorrtedArr = bubbleSort(arrOfItems);
-        System.out.println("made it");
-        createNumsFile(sorrtedArr, "bubble");
+        if(args.length == 2 && Integer.parseInt(args[1]) == 0){
+            for(int i = 0; i < sorrtedArr.length; i++){
+                System.out.println(sorrtedArr[i]);
+            }
+        }
     }
 
     public static int[] bubbleSort(int[] numbers){
