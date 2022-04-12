@@ -4,16 +4,39 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
+
 class Sort{
     public static void main(String[] args) {
-        int numberOfItems = Integer.parseInt(args[0]);
-        int[] arrOfItems = generateRandomNums(numberOfItems);
-        int[] sorrtedArr = bubbleSort(arrOfItems);
-        if(args.length == 2 && Integer.parseInt(args[1]) == 0){
-            for(int i = 0; i < sorrtedArr.length; i++){
-                System.out.println(sorrtedArr[i]);
+        int numberOfItems = 0;
+        String sortAlgo = null;
+        String verbos = null;
+
+        int[] randNumArr;
+        int[] sorttedNumArr;
+        if(args.length >= 2){
+            numberOfItems = Integer.parseInt(args[0]);
+            randNumArr = generateRandomNums(numberOfItems);
+            sortAlgo = args[1];
+            System.out.println(sortAlgo);
+            if(sortAlgo.equals(args[1])){
+                sorttedNumArr = bubbleSort(randNumArr);
+                printArr(sorttedNumArr);
+            }
+        } else {
+            System.out.println("Enter at least the number of items to sort followed by one of following sort options: \n1. bubble");
+        }
+    }
+
+    public static void printArr(int[] arr){
+        System.out.print("[");
+        for(int i = 0; i < arr.length; i++){
+            System.out.print(arr[i]);
+            if(i != arr.length - 1){
+                System.out.print(", ");
             }
         }
+        System.out.print("]");
     }
 
     public static int[] bubbleSort(int[] numbers){
