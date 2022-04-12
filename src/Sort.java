@@ -2,43 +2,149 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.Random;
 
 
 public class Sort{
     public static void main(String[] args) {
-        int numOfnums = 0;
-        String sortAlgo = null;
-        int[] sorttedNumArr;
         
-        if(args.length >= 2){
-            numOfnums = Integer.parseInt(args[0]);
+        if(args.length >= 2 && isInteger(args[0])){
+            int numOfnums = Integer.parseInt(args[0]);
             int[] randNumArr = generateRandomNums(numOfnums);
+            int[] sorttedNumArr;
+            long start;
+            long end;
+            long duration;
             for(int i = 1; i < args.length; i++){
                 if(args[i].equals("bubble")){
-                    long start = System.currentTimeMillis();
+                    start = System.nanoTime();
                     sorttedNumArr = bubbleSort(randNumArr);
-                    long end = System.currentTimeMillis();
-                    long duration = end - start;
-                    printResults(numOfnums, duration, args[i]);
+                    end = System.nanoTime();
+                    duration = end - start;
+                    if((i + 1) < args.length && args[i + 1].equals("-v")){
+                        printResultsVerbose(sorttedNumArr, numOfnums, duration, args[i]);
+                    } else {
+                        printResults(numOfnums, duration, args[i]);
+                    }
                 } else if(args[i].equals("selection")){
-                    long start = System.currentTimeMillis();
+                    start = System.nanoTime();
                     sorttedNumArr = selectionSort(randNumArr);
-                    long end = System.currentTimeMillis();
-                    long duration = end - start;
-                    printResults(numOfnums, duration, args[i]);
+                    end = System.nanoTime();
+                    duration = end - start;
+                    if((i + 1) < args.length && args[i + 1].equals("-v")){
+                        printResultsVerbose(sorttedNumArr, numOfnums, duration, args[i]);
+                    } else {
+                        printResults(numOfnums, duration, args[i]);
+                    }
                 } else if(args[i].equals("insertion")){
-                    long start = System.currentTimeMillis();
+                    start = System.nanoTime();
                     sorttedNumArr = insertionSort(randNumArr);
-                    long end = System.currentTimeMillis();
-                    long duration = end - start;
-                    printResults(numOfnums, duration, args[i]);
+                    end = System.nanoTime();
+                    duration = end - start;
+                    if((i + 1) < args.length && args[i + 1].equals("-v")){
+                        printResultsVerbose(sorttedNumArr, numOfnums, duration, args[i]);
+                    } else {
+                        printResults(numOfnums, duration, args[i]);
+                    }
+                } else if(args[i].equals("merge")){
+                    start = System.nanoTime();
+                    sorttedNumArr = mergeSort(randNumArr, 0, randNumArr.length - 1);
+                    end = System.nanoTime();
+                    duration = end - start;
+                    if((i + 1) < args.length && args[i + 1].equals("-v")){
+                        printResultsVerbose(sorttedNumArr, numOfnums, duration, args[i]);
+                    } else {
+                        printResults(numOfnums, duration, args[i]);
+                    }
+                } else if(args[i].equals("shell")){
+                    start = System.nanoTime();
+                    sorttedNumArr = shellSort(randNumArr);
+                    end = System.nanoTime();
+                    duration = end - start;
+                    if((i + 1) < args.length && args[i + 1].equals("-v")){
+                        printResultsVerbose(sorttedNumArr, numOfnums, duration, args[i]);
+                    } else {
+                        printResults(numOfnums, duration, args[i]);
+                    }
                 }
 
             }
         } else {
-            System.out.println("Enter at least the number of items to sort followed by one of following sort options: \n1. bubble");
+            System.out.println("Enter the number of items to sort followed by one of following sort options: \n1. bubble\n2. selection\n3. insertion\n4. merge\n5. shell");
         }
+    }
+
+    public static int[] shellSort(int[] numbers){
+        for(int gapValue = numbers.length/2; gapValue > 0; gapValue /= 2){
+            for(int i = 0; i < gapValue; i++){
+                numbers = insertionSortInterleaved(numbers, i, gapValue);
+            }
+        }
+        return numbers;
+    }
+
+    public static int[] insertionSortInterleaved(int[] numbers, int startIndex, int gap){
+        int i = 0;
+        int j = 0;
+        int temp = 0;
+
+        for(i = startIndex + gap; i < numbers.length; i = i + gap){
+            j = i;
+            while(j - gap >= startIndex && numbers[j] < numbers[j - gap]){
+                temp = numbers[j];
+                numbers[j] = numbers[j - gap];
+                numbers[j - gap] = temp;
+                j = j - gap;
+            }
+        }
+        return numbers;
+    }
+
+    public static int[] mergeSort(int[] numbers, int i, int k){
+        int j = 0;
+
+        if(i < k){
+            j = (i + k)/2;
+            mergeSort(numbers, i, j);
+            mergeSort(numbers, j + 1, k);
+
+            merge(numbers, i, j, k);
+        }
+        return numbers;
+    }
+
+    public static int[] merge(int[] numbers, int i, int j, int k){
+        int mergedSize = k - i + 1;
+        int mergePos = 0;
+        int leftPos = i;
+        int rightPos = j + 1;
+        int[] mergedNumbers = new int[mergedSize];
+
+        while(leftPos <= j && rightPos <= k){
+            if(numbers[leftPos] <= numbers[rightPos]){
+                mergedNumbers[mergePos] = numbers[leftPos];
+                ++leftPos;
+            } else {
+                mergedNumbers[mergePos] = numbers[rightPos];
+                ++rightPos;
+            }
+            ++mergePos;
+        }
+        while(leftPos <= j){
+            mergedNumbers[mergePos] = numbers[leftPos];
+            ++leftPos;
+            ++mergePos;
+        }
+        while(rightPos <= k){
+            mergedNumbers[mergePos] = numbers[rightPos];
+            ++rightPos;
+            ++mergePos;
+        }
+        for(mergePos = 0; mergePos < mergedSize; ++mergePos){
+            numbers[i + mergePos] = mergedNumbers[mergePos];
+        }
+        return numbers;
     }
 
     public static int[] insertionSort(int[] numbers){
@@ -57,6 +163,7 @@ public class Sort{
         }
         return numbers;
     }
+
     public static int[] selectionSort(int[] numbers){
         int i = 0;
         int j = 0;
@@ -113,8 +220,17 @@ public class Sort{
         return false;
     }
 
+    public static boolean isInteger(String string){
+        try{
+            int intValue = Integer.parseInt(string);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     public static void printResults(int numOfnums, long duration, String sortAlgo){
-        System.out.println("It took " + sortAlgo + " sort " + duration + " milliseconds to sort " + numOfnums + " items.");
+        System.out.println("It took " + sortAlgo + " sort " + duration + " nanoseconds to sort " + numOfnums + " items.");
     }
 
     public static void printResultsVerbose(int[] arr, int numOfnums, long duration, String sortAlgo){
@@ -126,7 +242,7 @@ public class Sort{
             }
         }
         System.out.println("]");
-        System.out.println("It took " + sortAlgo + " sort " + duration + " milliseconds to sort " + numOfnums + " items.");
+        System.out.println("It took " + sortAlgo + " sort " + duration + " nanoseconds to sort " + numOfnums + " items.");
     }
 
     public static void createNumsFile(int[] numbers, String fileName){
