@@ -1,2 +1,4 @@
 *.jar
 *.txt
+!README.txt
+.vscode/
