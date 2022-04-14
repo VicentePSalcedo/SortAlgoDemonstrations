@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class Sort{
@@ -10,75 +11,20 @@ public class Sort{
         
         if(args.length >= 2 && isInteger(args[0])){
             
-            int numOfnums = Integer.parseInt(args[0]);
-            int[] randNumArr = generateRandomNums(numOfnums);
-            int[] sorttedNumArr;
-            long start;
-            long end;
-            long duration;
-            boolean allCheck = false;
-            String sortAlgo;
+            commandLine(args);
 
-            for(int i = 1; i < args.length; i++){
-                if(args[i].equals("all")){
-                    allCheck = true;
-                }
-            }
-
-            for(int i = 1; i < args.length; i++){
-                if(allCheck){
-                    sortAlgo = "all";
-                    i = args.length;
-                } else {
-                    sortAlgo = args[i];
-                }
-                if(sortAlgo.equals("bubble") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = bubbleSort(randNumArr);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "bubble");
-                }
-                if(sortAlgo.equals("selection") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = selectionSort(randNumArr);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "selecion");
-                }
-                if(sortAlgo.equals("insertion") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = insertionSort(randNumArr);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "insertion");
-                }
-                if(sortAlgo.equals("merge") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = mergeSort(randNumArr, 0, randNumArr.length - 1);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "merge");
-                }
-                if(sortAlgo.equals("shell") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = shellSort(randNumArr);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "shell");
-                }
-                if(sortAlgo.equals("quick") || sortAlgo.equals("all")){
-                    start = System.nanoTime();
-                    sorttedNumArr = quickSort(randNumArr, 0, randNumArr.length - 1);
-                    end = System.nanoTime();
-                    duration = end - start;
-                    printResults(numOfnums, duration, "quick");
-                }
-
-            }
-
+        } else if(args.length >= 1) {
+            System.out.print("Enter the number of items to sort followed by the following sort algorithm(s) or \"all\": \n1. bubble\n2. selection\n3. insertion\n4. merge\n5. shell\n6. quick\nTo run in continues input mode launch the java app without arguments.");
         } else {
-            System.out.print("Enter the number of items to sort followed by the following sort algorithm(s) or \"all\": \n1. bubble\n2. selection\n3. insertion\n4. merge\n5. shell\n6. quick");
+            Scanner scanner = new Scanner(System.in);
+            String input;
+            while (true) {
+                input = scanner.nextLine();
+                if (input.replaceAll(" ", "").equals("exit")) {
+                    break;
+                }
+                System.out.println("How many items?");
+            }
         }
 
     }
@@ -302,4 +248,72 @@ public class Sort{
         }
     }
     
+    public static void commandLine(String[] args){
+        int numOfnums = Integer.parseInt(args[0]);
+        int[] randNumArr = generateRandomNums(numOfnums);
+        int[] sorttedNumArr;
+        long start;
+        long end;
+        long duration;
+        boolean allCheck = false;
+        String sortAlgo;
+
+        for(int i = 1; i < args.length; i++){
+            if(args[i].equals("all")){
+                allCheck = true;
+            }
+        }
+
+        for(int i = 1; i < args.length; i++){
+            if(allCheck){
+                sortAlgo = "all";
+                i = args.length;
+            } else {
+                sortAlgo = args[i];
+            }
+            if(sortAlgo.equals("bubble") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = bubbleSort(randNumArr);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "bubble");
+            }
+            if(sortAlgo.equals("selection") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = selectionSort(randNumArr);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "selecion");
+            }
+            if(sortAlgo.equals("insertion") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = insertionSort(randNumArr);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "insertion");
+            }
+            if(sortAlgo.equals("merge") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = mergeSort(randNumArr, 0, randNumArr.length - 1);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "merge");
+            }
+            if(sortAlgo.equals("shell") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = shellSort(randNumArr);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "shell");
+            }
+            if(sortAlgo.equals("quick") || sortAlgo.equals("all")){
+                start = System.nanoTime();
+                sorttedNumArr = quickSort(randNumArr, 0, randNumArr.length - 1);
+                end = System.nanoTime();
+                duration = end - start;
+                printResults(numOfnums, duration, "quick");
+            }
+
+        }
+    }
 }
