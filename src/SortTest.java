@@ -1,12 +1,11 @@
-//IMPORTANT: this file depends on the junit-platform-console-standalone-*.*.*.jar found on Junit5's website
 import static org.junit.Assert.assertArrayEquals;
 import org.junit.Test;
 
 public class SortTest{
     @Test
     public void testBubbleSort(){
-        int[] randArr = Sort.generateRandomNums(100);
-        int[] sortArr = Sort.quickSort(randArr, 0, randArr.length - 1);
+        int[] randArr = new int[] {1, 5, 2, 4, 3};
+        int[] sortArr = new int[] {1, 2, 3, 4, 5};
         assertArrayEquals(sortArr, Sort.bubbleSort(randArr));
     }
     @Test
@@ -39,5 +38,12 @@ public class SortTest{
         int[] randArr = Sort.generateRandomNums(100);
         int[] sortArr = Sort.shellSort(randArr);
         assertArrayEquals(sortArr, Sort.quickSort(randArr, 0, randArr.length - 1));
+    }
+    @Test
+    public void testHeapSort(){
+        int[] randArr = Sort.generateRandomNums(100);
+        int[] sortArr = Sort.quickSort(randArr, 0, randArr.length - 1);
+        Sort.createNumsFile(Sort.heapSort(randArr, randArr.length), "heap");
+        assertArrayEquals(sortArr, Sort.heapSort(randArr, randArr.length));
     }
 }
