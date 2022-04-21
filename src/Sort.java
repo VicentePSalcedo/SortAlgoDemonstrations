@@ -25,21 +25,22 @@ public class Sort{
                 if(args[i].equals("all")){
                     allCheck = true;
                 }
-                if(!args[i].equals("bubble") || !args[i].equals("selection") || !args[i].equals("insertion") || !args[i].equals("merge") || !args[i].equals("shell") || !args[i].equals("quick") || !args[i].equals("heap")){
+                if(!args[i].equals("bubble") && !args[i].equals("selection") && !args[i].equals("insertion") && !args[i].equals("merge") && !args[i].equals("shell") && !args[i].equals("quick") && !args[i].equals("heap") && !args[i].equals("all")){
                     argCheck = true;
                 }
             }
 
             for(int i = 1; i < args.length; i++){
-                if(allCheck){
-                    sortAlgo = "all";
-                    i = args.length;
-                }
                 if(argCheck){
                     System.out.print("Enter the number of items to sort followed by the following sort algorithm(s) or \"all\": \n1. bubble\n2. selection\n3. insertion\n4. merge\n5. shell\n6. quick\n7. heap");
                     break;
                 }
-                sortAlgo = args[i];
+                if(allCheck){
+                    sortAlgo = "all";
+                    i = args.length;
+                } else {
+                    sortAlgo = args[i];
+                }
                 if(sortAlgo.equals("bubble") || sortAlgo.equals("all")){
                     start = System.nanoTime();
                     sorttedNumArr = bubbleSort(randNumArr);
